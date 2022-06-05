@@ -32,10 +32,7 @@ const Role = db.role;
 const User = db.user;
 
 db.mongoose
-  .connect('mongodb+srv://userone:userone@ictjincy.oaffj.mongodb.net/Library?retryWrites=true&w=majority', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  })
+  .connect('mongodb+srv://userone:userone@ictjincy.oaffj.mongodb.net/Library?retryWrites=true&w=majority')
   .then(() => {
     console.log("Successfully connect to MongoDB.");
     initial();
@@ -47,13 +44,6 @@ db.mongoose
 
 // simple route
 app.get("/", (req, res) => {
-  mongoose.connect('mongodb+srv://userone:userone@ictjincy.oaffj.mongodb.net/Library?retryWrites=true&w=majority')
-  .then(() => {
-    console.log("Successfully connect to MongoDB.");
-    initial();
-  });
-
-  
   res.json({ message: "Welcome to bezkoder application." });
 });
 
@@ -88,7 +78,7 @@ function initial() {
           console.log("error", err);
         }
 
-        console.log("added 'moderator' to roles collection");
+        console.log("added 'superadmin' to roles collection");
       });
 
       new Role({
