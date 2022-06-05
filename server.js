@@ -46,7 +46,15 @@ db.mongoose
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to bezkoder application." });
 });
-
+app.get("/user", (req, res) => {
+  User.findOne((err, response) => {
+    if (!err && response) {
+      res.send(response);
+      res.status(200).send({response});
+    }
+  });
+  
+});
 // routes
 require("./app/routes/auth.routes")(app);
 require("./app/routes/user.routes")(app);
