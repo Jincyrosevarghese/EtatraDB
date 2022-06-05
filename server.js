@@ -105,7 +105,7 @@ function initial() {
       new User({
         username: "admin",
         password: "admin",
-        role:[
+        roles:[
           {
             type: "629b95e31c8d7835186333ef",
             ref: "Role"
