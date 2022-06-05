@@ -47,6 +47,13 @@ db.mongoose
 
 // simple route
 app.get("/", (req, res) => {
+  mongoose.connect('mongodb+srv://userone:userone@ictjincy.oaffj.mongodb.net/Library?retryWrites=true&w=majority')
+  .then(() => {
+    console.log("Successfully connect to MongoDB.");
+    initial();
+  });
+
+  
   res.json({ message: "Welcome to bezkoder application." });
 });
 
