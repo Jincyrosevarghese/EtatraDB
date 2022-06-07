@@ -50,10 +50,10 @@ app.get("/user", (req, res) => {
   User.findOne((err, response) => {
     if (!err && response) {
       res.send(response);
-      res.status(200).send({response});
+      res.status(200).send({ response });
     }
   });
-  
+
 });
 // routes
 require("./app/routes/auth.routes")(app);
@@ -70,7 +70,8 @@ function initial() {
   Role.estimatedDocumentCount((err, count) => {
     if (!err && count === 0) {
       new Role({
-        name: "user"
+        name: "user",
+        roleId: 3
       }).save(err => {
         if (err) {
           console.log("error", err);
@@ -80,7 +81,8 @@ function initial() {
       });
 
       new Role({
-        name: "superadmin"
+        name: "superadmin",
+        roleId: 1
       }).save(err => {
         if (err) {
           console.log("error", err);
@@ -90,7 +92,8 @@ function initial() {
       });
 
       new Role({
-        name: "admin"
+        name: "admin",
+        roleId: 2
       }).save(err => {
         if (err) {
           console.log("error", err);
@@ -103,14 +106,9 @@ function initial() {
   User.estimatedDocumentCount((err, count) => {
     if (!err && count === 0) {
       new User({
-        username: "admin",
+        username: "superadmin",
         password: "admin",
-        roles:[
-          {
-            type: "629b95e31c8d7835186333ef",
-            ref: "Role"
-          }
-        ]
+        roleId: 1
       }).save(err => {
         if (err) {
           console.log("error", err);
@@ -119,7 +117,7 @@ function initial() {
         console.log("added 'user' to roles collection");
       });
 
-      
+
     }
   });
 }
