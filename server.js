@@ -32,7 +32,7 @@ const Role = db.role;
 const User = db.user;
 
 db.mongoose
-  .connect('mongodb+srv://userone:userone@ictjincy.oaffj.mongodb.net/Library?retryWrites=true&w=majority')
+  .connect('mongodb+srv://userone:userone@ictjincy.oaffj.mongodb.net/Library?retryWrites=true&w=majority',{useUnifiedTopology: true})
   .then(() => {
     console.log("Successfully connect to MongoDB.");
     initial();
@@ -46,21 +46,68 @@ db.mongoose
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to bezkoder application." });
 });
-app.get("/user", (req, res) => {
-  User.findOne((err, response) => {
+app.get("/users", (req, res) => {
+  User.find((err, response) => {
     if (!err && response) {
       res.send(response);
       res.status(200).send({ response });
     }
   });
-
+  
 });
+
+app.post("/login", (req, res) => {
+console.log(req.body);
+  User.findOne({username:req.body.username,password:req.body.password}).exec((err, response)=>  {
+    if (!err && response ) {
+      console.log(response)
+      //res.send(response);
+      res.status(200).json({ response });
+    }
+    else
+    {
+      res.status(404).json({ response });;
+      //console.log("err"+response);
+    }
+  });
+})
+
+app.get("/admin", (req, res) => {
+  console.log(req.body);
+    User.find({roleId:2}).exec((err, response)=>  {
+      if (!err && response ) {
+        console.log(response)
+        //res.send(response);
+        res.status(200).json({ response });
+      }
+      else
+      {
+        console.log("err"+response);
+      }
+    });
+  })
+
+  app.get("/user", (req, res) => {
+    console.log(req.body);
+      User.find({roleId:3}).exec((err, response)=>  {
+        if (!err && response ) {
+          console.log(response)
+          //res.send(response);
+          res.status(200).json({ response });
+        }
+        else
+        {
+          console.log("err"+response);
+        }
+      });
+    })
+
 // routes
 require("./app/routes/auth.routes")(app);
 require("./app/routes/user.routes")(app);
 
 // set port, listen for requests
-const PORT = process.env.PORT || 8080;
+const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
@@ -106,9 +153,43 @@ function initial() {
   User.estimatedDocumentCount((err, count) => {
     if (!err && count === 0) {
       new User({
-        username: "superadmin",
-        password: "admin",
+        username: "superadmin@gmail.com",
+        password: "admin123",
         roleId: 1
+      }).save(err => {
+        if (err) {
+          console.log("error", err);
+        }
+
+        console.log("added 'user' to roles collection");
+      });
+
+
+    }
+  });
+  User.estimatedDocumentCount((err, count) => {
+    if (!err && count === 0) {
+      new User({
+        username: "admin@gmail.com",
+        password: "admin123",
+        roleId: 2
+      }).save(err => {
+        if (err) {
+          console.log("error", err);
+        }
+
+        console.log("added 'user' to roles collection");
+      });
+
+
+    }
+  });
+  User.estimatedDocumentCount((err, count) => {
+    if (!err && count === 0) {
+      new User({
+        username: "user@gmail.com",
+        password: "user1234",
+        roleId: 3
       }).save(err => {
         if (err) {
           console.log("error", err);
